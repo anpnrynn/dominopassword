@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Thu, 30 Nov 2023 14:44:07 GMT">
+    <meta name="description" content="Secure Password Generation Page version 1.0.0-beta1 Not-OpenSource Copyright Anoop Kumar Narayanan 01-12-2023">
+    <meta name="keywords" content="Secure Password Generation">
+    <title></title>
+    <script type="text/javascript">
+    
+var initdata = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_+-={}|[]\\:\";'<>?,./";
+var shuffledData ="";
+                       
+function rotate(srotate, n){
+     s1 = srotate.substr (0, n);
+     s2 = srotate.substr (n, srotate.length - n);
+     return s2+s1;
+}                     
+                     
+function swapchars( s, m, n )
+{    
+     var arr = s.split('');
+     var c = arr[m];
+     arr[m] = arr[n];
+     arr[n] = c;
+     return arr.join('');
+}  
+            
+function shuffle (s, pin){    
+     var stemp = s;   
+     var n = stemp.length;
+     var k = 1;   
+     for ( let j = 0; j < pin; j++ ) {    
+         var s1 = stemp.substr( 0, n/2);  
+         var s2 = stemp.substr( n/2, n/2);
+         //console.log(s1);
+         //console.log(s2); 
+         
+         for ( let i = 0; i < n/4; i++ ){
+               if( k % 2  == 0 ){
+                    s1 = swapchars( s1, i, n/2-i-1 ); 
+                    s2 = swapchars( s2, i, n/2-i-1); 
+               } else { 
+                    s1 = swapchars( s1, i, n/2-i-2 ); 
+                    s2 = swapchars( s2, i, n/2-i-2 ); 
+               } 
+               
+               k++;
+         }  
+         
+         stemp = s1 + s2;
+            
+         if( s == stemp ){
+             console.log("strings match: " + stemp);
+         }
+         stemp = rotate( stemp, 23 );  
+     } 
+     
+     
+                 
+     if( stemp.length != s.length ){
+         console.log( "lengths don't match ");
+         console.log(stemp);
+         console.log(s);
+     } else {
+         console.log( "lengths match ");
+         console.log(stemp);
+     }
+                 
+     extendstring = stemp + stemp.substr(0, 14);
+     console.log(extendstring); 
+     document.getElementById("shuffledData").value = extendstring;  
+     shuffledData = extendstring;
+     return extendstring;
+}   
+
+function initialize(object){     
+    var pinValue = document.getElementById("pin").value; 
+    shuffle(initdata, pinValue);
+} 
+
+var finalpassword = "";
+
+function getCharacter(object){ 
+         var lights = document.getElementsByClassName("patternbuttons");
+         for( let i =0; i < lights.length; i++ ){ 
+              if( lights[i] == object ){
+                  return shuffledData[i];
+                  }
+         }
+         
+         return null;
+}
+  
+function finish(){
+       document.getElementById("finalpasswordbox").value = finalpassword;
+}
+
+function next(){
+         var md1 = document.getElementById("matrixdiv1"); 
+         var md2 = document.getElementById("matrixdiv2");
+         var md3 = document.getElementById("matrixdiv3");
+         
+         if( md1.style.display=="block"){  
+           
+              md1.style.display = "none";
+              md2.style.display = "block";
+         }     else 
+         
+         if( md2.style.display=="block"){   
+              md2.style.display = "none";
+              md3.style.display = "block";
+         }     else
+
+         if( md3.style.display=="block"){
+              md1.style.display = "none";
+              md2.style.display = "none";
+              md3.style.display = "block";
+         }
+} 
+
+function previous(){
+         var md1 = document.getElementById("matrixdiv1"); 
+         var md2 = document.getElementById("matrixdiv2");
+         var md3 = document.getElementById("matrixdiv3");
+         
+         if( md3.style.display=="block"){   
+              md3.style.display = "none";
+              md2.style.display = "block";
+         }     else
+
+         if( md2.style.display=="block"){
+              md2.style.display = "none";
+              md1.style.display = "block";
+         }    else
+
+         if( md1.style.display="block"){ 
+             md2.style.display = "none";
+             md3.style.display = "none";
+         }
+} 
+
+function patternclick(object){ 
+         console.log("object problem or function problem");
+         console.log(object);
+         console.log(object.parentElement.parentElement.id); 
+         var objsrctmp = object.src.split("/");
+         var objsrc = objsrctmp[objsrctmp.length-1];
+         
+         if( objsrc != "off.png"){
+             //object.src = "off.png"; 
+             console.log(objsrc); 
+         }else {
+               if( object.parentElement.parentElement.id == "matrixdiv1" ) { 
+                   console.log("changing image");
+                   object.src = "on1.png"; 
+                   var data = getCharacter( object );
+                   if( data != null ){
+                       finalpassword += data;
+                   }
+               } else if( object.parentElement.parentElement.id == "matrixdiv2" ) { 
+               console.log("changing image");
+               object.src = "on2.png"; 
+               var data = getCharacter( object );
+                   if( data != null ) {
+                       finalpassword += data;
+                   }
+               } else if( object.parentElement.parentElement.id == "matrixdiv3" ) { 
+               console.log("changing image");
+               object.src = "on3.png";  
+               var data = getCharacter( object );
+                   if( data != null ){
+                       finalpassword += data; 
+                   }
+               }
+               else { 
+                        console.log("object.parent.parent isn't it ");
+               }
+         }
+         finish();
+}
+       
+function resetLights(){
+         for( let i =1; i <= 108; i++ ){
+              var patternButton = document.getElementById("img_"+i);
+              patternButton.src="off.png"; 
+              i++;
+         }
+}
+
+function resetBoard(){  
+         var md1 = document.getElementById("matrixdiv1"); 
+         var md2 = document.getElementById("matrixdiv2");
+         var md3 = document.getElementById("matrixdiv3");
+             md1.style.display = "block";
+             md2.style.display = "none";
+             md3.style.display = "none";
+             document.getElementById( "shuffledData").value = "";
+             document.getElementById( "pin").value = 101;
+             document.getElementById( "finalpasswordbox").value = "";
+             finalpassword ="";
+}
+
+function resetdominos(){ 
+             resetLights(); 
+             resetBoard();
+}
+
+    </script>
+    <style type="text/css">  
+    .patternbuttons {
+               margin-right: 14px;
+    }
+    body {
+      color:#000000;
+      background-color:#FFFFFF;
+    } 
+    .matrixdiv1{ 
+                 display:block;
+    }
+    .matrixdiv2{ 
+                 display:none;
+    }
+    .matrixdiv3{ 
+                 display:none;
+    }
+    .matrixdiv4{ 
+                 display:none;
+    }
+    a  { color:#0000FF; }
+    a:visited { color:#800080; }
+    a:hover { color:#008000; }
+    a:active { color:#FF0000; } 
+    .wrap { width:960px; margin:0 auto;}
+    </style>
+  </head>
+  <body>    
+      <h3>Domino Password (Secure Password Gen WebApp)</h3>
+      <div class="wrap">
+      </div>
+             <div>
+                  <p> Pin (3-5 digits long) : <input maxlength="6" type="number" id="pin" name="pin" min="101" max="99999" >
+                  <br/><button name="Generate Random String" value="Generate Random String" onclick="initialize(this);">Generate</button>
+                  <br/><input type="text" disabled value="" min="110" size="110" maxlength="110" maxlength="256" id="shuffledData" style="font-family:monospace;" ></inputv>
+             </div>
+             
+             <div id="matrixdiv1" class="matrixdiv1" style="display:block;" > 
+                   <p> <bold>Pattern 1:</bold></p>
+                   <p> 
+                       <img id="img_1" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_2" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_3" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_4" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_5" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_6" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_7" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_8" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_9" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_10" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_11" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_12" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>  
+                   <p> 
+                       <img id="img_13" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_14" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_15" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_16" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_17" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_18" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_19" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_20" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_21" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_22" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_23" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_24" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p> 
+                   <p> 
+                       <img id="img_25" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_26" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_27" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_28" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_29" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_30" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_31" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_32" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_33" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_34" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_35" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_36" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>                 
+             </div>    
+             
+             
+             <div id="matrixdiv2" class="matrixdiv2"  style="display:none;" > 
+                   <p> <bold>Pattern 2:</bold></p>
+                   <p> 
+                       <img id="img_37" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_38" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_39" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_40" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_41" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_42" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_43" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_44" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_45" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_46" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_47" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_48" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>  
+                   <p> 
+                       <img id="img_49" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_50" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_51" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_52" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_53" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_54" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_55" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_56" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_57" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_58" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_59" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_60" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p> 
+                   <p> 
+                       <img id="img_61" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_62" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_63" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_64" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_65" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_66" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_67" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_68" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_69" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_70" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_71" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_72" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>                 
+             </div>
+             
+             
+             <div id="matrixdiv3" class="matrixdiv3" style="display:none;" > 
+                   <p> <bold>Pattern 3:</bold></p>
+                   <p> 
+                       <img id="img_73" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_74" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_75" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_76" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_77" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_78" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_79" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_80" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_81" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_82" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_83" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_84" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>  
+                   <p> 
+                       <img id="img_85" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_86" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_87" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_88" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_89" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_90" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_91" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_92" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_93" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_94" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_95" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_96" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p> 
+                   <p> 
+                       <img id="img_97" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_98" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_99" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_100" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_101" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_102" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>
+                   
+                   <p> 
+                       <img id="img_103" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_104" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_105" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_106" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_107" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                       <img id="img_108" onclick="patternclick(this);" class="patternbuttons" src="off.png" width="32" height="32" border="0">
+                   </p>                 
+             </div>
+             
+             
+             <br/>
+             <!-- <button name="Reset" value="Reset"onclick="resetdominos();" >Reset&laquo;</button>  -->
+             <button name="Back" value="Back" onclick="previous();" >Back&lt;</button>
+             <button name="Next" value="Next" onclick="next();" >Next&gt;</button>
+             <button name="Finish" value="Finish" onclick="finish();" >Finish</button>
+             <br/> 
+             <input id="finalpasswordbox" name="Password" value="" value="" type="text" min="32" size="32" maxlength="32" style="font-family:monospace;"/>
+          </div>
+  </body>
+</html>
