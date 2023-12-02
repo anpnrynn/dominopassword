@@ -20,3 +20,7 @@ Runs completely on web browser, no need of additional libraries.
 Runs locally on webbrowsers no need of internet.
 
 NOTE: In beta phase, please use caution.
+
+Contact:
+anoop (dot) kn (at) live (dot) in
++919886016581
