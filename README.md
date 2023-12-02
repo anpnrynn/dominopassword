@@ -6,11 +6,18 @@ Creative Commons License
 Source Code license: 
 GPLv3 License 
 
-Use new MAJOR version number if the algorithm is changed and Copy and create a new html file. 
+Use new MAJOR version number if the algorithm is changed and copy and create a new html file. 
 
+
+ 
 Gen1   - For Crypto functions (old algo), same as index.html. 
+
 Gen1_1 - For Crypto functions with updated shuffle algorithm. 
+
 Gen2   - For Password generation only, not for crypto functions. 
+
+
+
 
 Usage Steps: 
 1. Set the Pin number. Should be from 1 to 99999 (including). 
