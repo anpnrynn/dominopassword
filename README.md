@@ -1,10 +1,31 @@
 # DominoPassword
-Secure Password Generation Page version 1.0.0-beta1 
+Secure Password Generation Page (Stable)
 
 Creative Commons License 
-
 Source Code license: 
 GPLv3 License 
+
+Gen1 - Old Crypto Functions Solution
+Gen1_1 - New Crypto Function Solution
+Gen2 - Password Generation Tool for personal use.
+
+GEN 2 For personal use
+Set the pin from 1 thru 99999 , takes about 10secs for 99999. 
+Then click and generate random seed string. 
+Create a Domino pattern, in pattern1 (should suffice for most cases), pattern2 (for larger passwords), and pattern3 for (really large passwords). 
+The password should be seen in the final text box below Domino Password Pattern. 
+
+IDEA is...
+Use different pins, but remember the pattern and the sequence in which the domino pattern is created. 
+ 
+Then change the pins for creating secure passwords for various applications and websites. 
+or, 
+You could keep the pin constant and change the domino pattern for various applications and websites. 
+or 
+You could change the pin and domino pattern for every for various applications and websites. 
+
+
+
 
 Use new MAJOR version number if the algorithm is changed and copy and create a new html file. 
 
