@@ -22,6 +22,7 @@ Just a GUI web browser
 * The password should be seen in the final text box below Domino Password Pattern. 
 
 ![Usage webm](https://github.com/anpnrynn/dominopassword/blob/main/DominoPasswordGen2%20-%20Usage%20Webp.webm)
+![Usage webm](https://github.com/anpnrynn/dominopassword/raw/main/DominoPasswordGen2%20-%20Usage%20Webp.webm)
 
 ### IDEA is...
 Use different pins, but remember the pattern and the sequence in which the domino pattern is created. 
